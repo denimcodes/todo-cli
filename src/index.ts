@@ -36,8 +36,14 @@ function main() {
         deleteTask(args[0]);
         break;
       case "list":
-        const tasks = listTasks();
+        const tasks = listTasks(args[0]);
         printTasks(tasks);
+        break;
+      case "mark-in-progress":
+        markInProgress(args[0]);
+        break;
+      case "mark-done":
+        markDone(args[0]);
         break;
       default:
         console.error(`${command} command not supported`);
@@ -66,6 +72,48 @@ function addTask(description: string | undefined) {
 
   writeTasks(tasks);
   console.log(`Added task ${task.id}`);
+}
+
+function markDone(id: string | undefined) {
+  if (!id?.trim()) {
+    console.error("Please enter task id to mark as done.");
+    process.exitCode = 1;
+    return;
+  }
+
+  const tasks = readTasks();
+  const task = tasks.find((task) => task.id === id);
+  if (!task) {
+    console.error(`Task with id ${id} not found`);
+    process.exitCode = 1;
+    return;
+  }
+  task.status = "done";
+  task.updatedAt = Date.now();
+
+  writeTasks(tasks);
+  console.log(`Updated task ${task.id}`);
+}
+
+function markInProgress(id: string | undefined) {
+  if (!id?.trim()) {
+    console.error("Please enter task id to mark as done.");
+    process.exitCode = 1;
+    return;
+  }
+
+  const tasks = readTasks();
+  const task = tasks.find((task) => task.id === id);
+  if (!task) {
+    console.error(`Task with id ${id} not found`);
+    process.exitCode = 1;
+    return;
+  }
+  task.status = "in-progress";
+  task.updatedAt = Date.now();
+
+  writeTasks(tasks);
+  console.log(`Updated task ${task.id}`);
 }
 
 function readTasks(): Task[] {
@@ -169,8 +217,24 @@ function deleteTask(id: string | undefined) {
   console.log(`Deleted task ${id}`);
 }
 
-function listTasks(): Task[] {
-  return readTasks();
+function listTasks(status: string | undefined): Task[] {
+  const tasks = readTasks();
+
+  if(!status) {
+    return tasks; 
+  }
+
+  switch (status) {
+    case "done":
+      return tasks.filter((task) => task.status === "done");
+    case "in-progress":
+      return tasks.filter((task) => task.status === "in-progress");
+    case "todo":
+      return tasks.filter((task) => task.status === "todo");
+    default:
+      console.log(`Invalid status ${status}`);
+      return [];
+  }
 }
 
 function printTasks(tasks: Task[]) {
