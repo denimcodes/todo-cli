@@ -9,7 +9,7 @@
     "dev": "tsx src/index.ts"
   },
   "bin": {
-    "todo-cli": "tsx src/index.ts"
+    "todo-cli": "dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -26,8 +26,5 @@
     "@types/node": "^25.9.1",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3"
-  },
-  "dependencies": {
-    "todo-cli": "link:"
   }
 }

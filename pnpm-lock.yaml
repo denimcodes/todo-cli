@@ -209,10 +209,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      todo-cli:
-        specifier: 'link:'
-        version: 'link:'
     devDependencies:
       '@types/node':
         specifier: ^25.9.1
